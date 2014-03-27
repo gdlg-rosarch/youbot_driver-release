@@ -1,3 +1,22 @@
+## youbot_driver (hydro) - 1.0.0-4
+
+User `walter@walter-4u` released the packages in the `youbot_driver` repository into the `hydro` distro by running `/usr/bin/bloom-release youbot_driver --track hydro --rosdistro hydro` on `Thu, 27 Mar 2014 16:50:20 -0000`
+
+The `youbot_driver` package was released.
+
+Version of package(s) in repository `youbot_driver`:
+- rosdistro version: `1.0.0-3`
+- old version: `1.0.0-3`
+- new version: `1.0.0-4`
+
+Versions of tools used:
+- bloom version: `0.5.2`
+- catkin_pkg version: `0.1.27`
+- rosdep version: `0.10.25`
+- rosdistro version: `0.3.4`
+- vcstools version: `0.1.33`
+
+
 ## youbot_driver - 1.0.0-3
 
 User `youbot@ubuntu` released the packages in the `youbot_driver` repository by running `/usr/bin/bloom-release youbot_driver --track hydro --rosdistro hydro` on `Thu, 30 Jan 2014 13:37:23 -0000`
