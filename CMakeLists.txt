@@ -4,17 +4,47 @@ project(youbot_driver)
 find_package(catkin REQUIRED COMPONENTS roscpp rosconsole)
 find_package(Boost REQUIRED COMPONENTS thread date_time filesystem system regex)
 
+if(WIN32)
+	add_definitions(-D_USE_MATH_DEFINES)    # get M_PI under Windows
+	add_definitions(-DWIN32_LEAN_AND_MEAN)  # avoid inclusion of WinSock.h by windows.h, as we need WinSock2.h
+	add_definitions(-DNOMINMAX)             # be able to use std::max, instead of windows defined functions
+	add_definitions(/wd4800)                # disable warning: variable set to boolean value
+
+	# need WinPcap library, using own cmake find file
+	set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+	find_package(WinPcap REQUIRED)
+endif()
+
+if(WIN32)
+	set(INCLUDE_DIRS
+		include
+		include/youbot_driver/soem/osal
+		include/youbot_driver/soem/osal/win32
+		include/youbot_driver/soem/oshw/win32
+		${WINPCAP_INCLUDE_DIRS}
+	)
+else(WIN32)
+	set(INCLUDE_DIRS
+		include
+		include/youbot_driver/soem/osal
+		include/youbot_driver/soem/oshw/linux
+	)
+endif(WIN32)
+
+## Note exported include dirs for install in cmake/config.cmake
 catkin_package(
-	INCLUDE_DIRS include
-	LIBRARIES YouBotDriver soem
+	INCLUDE_DIRS ${INCLUDE_DIRS}
+	LIBRARIES YouBotDriver soem rt
 	CATKIN_DEPENDS roscpp rosconsole
 	DEPENDS Boost
 	CFG_EXTRAS config.cmake
 )
-
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(
+	${INCLUDE_DIRS}
+	${catkin_INCLUDE_DIRS}
+)
 link_directories(${catkin_LIBRARY_DIRS})
 add_definitions(-DUSE_ROS_LOGGING)
 
@@ -37,7 +67,7 @@ ENDIF (CppUnit_FOUND)
 add_subdirectory(src/soem)
 
 ########### youBot display example application ###########
-add_subdirectory(src/display)
+#add_subdirectory(src/display)
 
 set(YOUBOT_DRIVER_SRC
   src/youbot/EthercatMaster.cpp
@@ -71,8 +101,9 @@ target_link_libraries(YouBotDriver soem ${catkin_LIBRARIES})
 
 #install binary and lib
 install(TARGETS YouBotDriver
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 #copy header files

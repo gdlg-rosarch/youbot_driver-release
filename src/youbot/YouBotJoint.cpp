@@ -49,6 +49,7 @@
  *
  ****************************************************************/
 #include "youbot_driver/youbot/YouBotJoint.hpp"
+#include "youbot_driver/youbot/EthercatMaster.hpp"
 namespace youbot {
 
 YouBotJoint::YouBotJoint(const unsigned int jointNo, const std::string& configFilePath) {
@@ -462,7 +463,7 @@ void YouBotJoint::setData(const JointAngleSetpoint& data) {
 		 this->limitMonitor->checkLimitsPositionControl(data.angle);
 
     messageBuffer.stctOutput.controllerMode = POSITION_CONTROL;
-    messageBuffer.stctOutput.value = (int32) round((data.angle.value() * ((double) storage.encoderTicksPerRound / (2.0 * M_PI))) / storage.gearRatio);
+    messageBuffer.stctOutput.value = (int32) boost::math::round((data.angle.value() * ((double) storage.encoderTicksPerRound / (2.0 * M_PI))) / storage.gearRatio);
 
 
     if (storage.inverseMovementDirection) {
@@ -545,7 +546,7 @@ void YouBotJoint::setData(const JointVelocitySetpoint& data) {
       throw std::out_of_range("A Gear Ratio of 0 is not allowed");
     }
 
-    messageBuffer.stctOutput.value = (int32) round((data.angularVelocity.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
+    messageBuffer.stctOutput.value = (int32) boost::math::round((data.angularVelocity.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
     if (storage.inverseMovementDirection) {
       messageBuffer.stctOutput.value *= -1;
     }
@@ -1177,7 +1178,7 @@ void YouBotJoint::parseMailboxStatusFlags(const YouBotSlaveMailboxMsg& mailboxMs
   // Bouml preserved body begin 00075BF1
 
     switch(mailboxMsg.stctInput.status){
-      case NO_ERROR:
+      case MAILBOX_SUCCESS:
         break;
       case INVALID_COMMAND:
         LOG(error) << this->storage.jointName << "Parameter name: " << mailboxMsg.parameterName << "; Command no: " << mailboxMsg.stctOutput.commandNumber << " is an invalid command!" ;
@@ -1228,7 +1229,7 @@ bool YouBotJoint::retrieveValueFromMotorContoller(YouBotSlaveMailboxMsg& message
                  << " value " << message.stctInput.value; */
        
       if (message.stctOutput.commandNumber == message.stctInput.commandNumber &&
-              message.stctInput.status == NO_ERROR) {
+              message.stctInput.status == MAILBOX_SUCCESS) {
         unvalid = false;
       } else {
         SLEEP_MILLISEC(timeTillNextMailboxUpdate);
@@ -1268,7 +1269,7 @@ bool YouBotJoint::setValueToMotorContoller(const YouBotSlaveMailboxMsg& mailboxM
        */
       if (mailboxMsgBuffer.stctOutput.commandNumber == mailboxMsgBuffer.stctInput.commandNumber &&
               mailboxMsgBuffer.stctOutput.value == mailboxMsgBuffer.stctInput.value &&
-              mailboxMsgBuffer.stctInput.status == NO_ERROR) {
+              mailboxMsgBuffer.stctInput.status == MAILBOX_SUCCESS) {
         unvalid = false;
       } else {
         SLEEP_MILLISEC(timeTillNextMailboxUpdate);

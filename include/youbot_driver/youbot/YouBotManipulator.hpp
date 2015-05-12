@@ -54,23 +54,14 @@
 #include <vector>
 #include <sstream>
 #include <string>
-#include "youbot_driver/generic/Logger.hpp"
-#include "youbot_driver/generic/Units.hpp"
-#include "youbot_driver/generic/Time.hpp"
-#include "youbot_driver/generic/ConfigFile.hpp"
-#include "youbot_driver/generic/Exceptions.hpp"
 #include "youbot_driver/youbot/YouBotGripper.hpp"
 #include "youbot_driver/youbot/YouBotJoint.hpp"
-#include "youbot_driver/youbot/EthercatMaster.hpp"
 #include "youbot_driver/youbot/EthercatMasterInterface.hpp"
 #include "youbot_driver/youbot/EthercatMasterWithThread.hpp"
-#include "youbot_driver/youbot/EthercatMasterWithoutThread.hpp"
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 namespace youbot {
 
-/// The number of manipulator joints
-#define ARMJOINTS 5
 ///////////////////////////////////////////////////////////////////////////////
 /// It groups the manipulator joints and the gripper together
 ///////////////////////////////////////////////////////////////////////////////
@@ -87,6 +78,8 @@ class YouBotManipulator {
     void calibrateManipulator(const bool forceCalibration = false);
 
     void calibrateGripper(const bool forceCalibration = false);
+
+    int getNumberJoints();
 
     ///return a joint form the arm1
     ///@param armJointNumber 1-5 for the arm joints
@@ -147,6 +140,8 @@ class YouBotManipulator {
     void commutationFirmware148();
 
     void initializeJoints();
+
+	unsigned int numberArmJoints; /// The number of manipulator joints
 
     boost::scoped_ptr<ConfigFile> configfile;
 

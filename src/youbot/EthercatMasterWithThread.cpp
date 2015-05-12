@@ -50,7 +50,7 @@
  ****************************************************************/
 extern "C" {
 #include "youbot_driver/soem/ethercattype.h"
-#include "youbot_driver/soem/nicdrv.h"
+#include "nicdrv.h"
 #include "youbot_driver/soem/ethercatbase.h"
 #include "youbot_driver/soem/ethercatmain.h"
 #include "youbot_driver/soem/ethercatconfig.h"
@@ -294,7 +294,7 @@ void EthercatMasterWithThread::initializeEthercat() {
   // Bouml preserved body begin 000410F1
 
     /* initialise SOEM, bind socket to ifname */
-    if (ec_init(ethernetDevice.c_str())) {
+    if (ec_init(const_cast<char*>(ethernetDevice.c_str()))) {
       LOG(info) << "Initializing EtherCAT on " << ethernetDevice << " with communication thread";
       /* find and auto-config slaves */
       if (ec_config(TRUE, &IOmap_) > 0) {
@@ -418,7 +418,7 @@ void EthercatMasterWithThread::initializeEthercat() {
         dataTraces.push_back(NULL);
       }
     }
-    automaticReceiveOffBufferVector.reserve(slaveMessages.size());
+    automaticReceiveOffBufferVector.resize(slaveMessages.size());
 
     if (nrOfSlaves > 0) {
       LOG(info) << nrOfSlaves << " EtherCAT slaves found";
@@ -571,7 +571,7 @@ void EthercatMasterWithThread::updateSensorActorValues() {
     while (!stopThread) {
 
       pastTime = boost::posix_time::microsec_clock::local_time() - startTime;
-      timeToWait = timeTillNextEthercatUpdate - pastTime.total_microseconds() - 100;
+      timeToWait = timeTillNextEthercatUpdate - pastTime.total_microseconds();
 
       if (timeToWait < 0 || timeToWait > (int) timeTillNextEthercatUpdate) {
         //    printf("Missed communication period of %d  microseconds it have been %d microseconds \n",timeTillNextEthercatUpdate, (int)pastTime.total_microseconds()+ 100);

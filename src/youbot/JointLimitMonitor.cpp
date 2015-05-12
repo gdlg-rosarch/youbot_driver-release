@@ -113,10 +113,17 @@ void JointLimitMonitor::checkLimitsPositionControl(const quantity<plane_angle>& 
 
 void JointLimitMonitor::checkLimitsEncoderPosition(const signed int& setpoint) {
   // Bouml preserved body begin 000FAF71
-	if(storage.areLimitsActive){
-      if (!((setpoint < this->storage.upperLimit) && (setpoint > this->storage.lowerLimit))) {
+    if(storage.areLimitsActive){
+      long upLimit = storage.upperLimit;
+      long lowLimit = storage.lowerLimit;
+      if (storage.inverseMovementDirection) {
+        upLimit = -storage.lowerLimit;
+        lowLimit = -storage.upperLimit;
+      }
+
+      if (!((setpoint < upLimit) && (setpoint > lowLimit))) {
         std::stringstream errorMessageStream;
-        errorMessageStream << "The setpoint angle for joint "<< this->storage.jointName <<" is out of range. The valid range is between " << this->storage.lowerLimit << " and " << this->storage.upperLimit << " and it is: " << setpoint;
+        errorMessageStream << "The setpoint angle for joint "<< this->storage.jointName <<" is out of range. The valid range is between " << lowLimit << " and " << upLimit << " and it is: " << setpoint;
         throw std::out_of_range(errorMessageStream.str());
       }
     }
@@ -191,7 +198,7 @@ void JointLimitMonitor::calculateBrakingDistance(const SlaveMessageInput& messag
   // Bouml preserved body begin 000FE471
 		actualVelocityRPS = (((double) messageInput.actualVelocity / 60.0) * storage.gearRatio * 2.0 * M_PI); // radian_per_second;
 
-		brakingDistance = abs((((actualVelocityRPS * actualVelocityRPS) / (2.0 * acceleration)) * ((double) storage.encoderTicksPerRound / (2.0 * M_PI))) / storage.gearRatio);
+		brakingDistance = (int) abs((((actualVelocityRPS * actualVelocityRPS) / (2.0 * acceleration)) * ((double) storage.encoderTicksPerRound / (2.0 * M_PI))) / storage.gearRatio);
 
 		bevorLowerLimit = storage.lowerLimit + brakingDistance;
 		bevorUpperLimit = storage.upperLimit - brakingDistance;
@@ -210,12 +217,12 @@ int JointLimitMonitor::calculateBrakingVelocity(const int actualPosition) {
 	if(actualPosition < bevorLowerLimit){
 		distanceToLimit = ((double) (actualPosition - storage.lowerLimit) / storage.encoderTicksPerRound) * storage.gearRatio * (2.0 * M_PI);
 		newVelocity =  -sqrt(2.0*acceleration* distanceToLimit);
-		return round((newVelocity / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
+		return (int) boost::math::round((newVelocity / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
 	}
 	if(actualPosition > bevorUpperLimit){
 		distanceToLimit = ((double) (storage.upperLimit - actualPosition) / storage.encoderTicksPerRound) * storage.gearRatio * (2.0 * M_PI);
 		newVelocity =  sqrt(2.0*acceleration* distanceToLimit);
-		return round((newVelocity / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
+		return (int) boost::math::round((newVelocity / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
 	}
 	return 0;
 	

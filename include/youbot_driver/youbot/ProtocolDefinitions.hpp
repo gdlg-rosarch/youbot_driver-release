@@ -153,7 +153,7 @@ enum MailboxErrorFlags {
 
 
 enum YouBotMailboxStatusFlags {
-    NO_ERROR = 100,
+    MAILBOX_SUCCESS = 100,  //formerly called "NO_ERROR", renamed due to name clash with Windows define
     INVALID_COMMAND = 2,
     WRONG_TYPE = 3,
     INVALID_VALUE = 4,

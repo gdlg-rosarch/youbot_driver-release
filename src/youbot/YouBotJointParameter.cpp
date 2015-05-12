@@ -502,7 +502,7 @@ void MaximumPositioningVelocity::getYouBotMailboxMsg(YouBotSlaveMailboxMsg& mess
     message.stctOutput.commandNumber = msgType;
     message.stctOutput.moduleAddress = DRIVE;
     message.stctOutput.typeNumber = 4; //MaximumPositioningVelocity
-    message.stctOutput.value = (int32) round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
+    message.stctOutput.value = (int32) boost::math::round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
 
   // Bouml preserved body end 0005A0F1
 }
@@ -561,7 +561,7 @@ void MotorAcceleration::getYouBotMailboxMsg(YouBotSlaveMailboxMsg& message, TMCL
     message.stctOutput.commandNumber = msgType;
     message.stctOutput.moduleAddress = DRIVE;
     message.stctOutput.typeNumber = 11; //MotorAcceleration
-    message.stctOutput.value = (int32) round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
+    message.stctOutput.value = (int32) boost::math::round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
 
   // Bouml preserved body end 0006ABF1
 }
@@ -669,7 +669,7 @@ void PositionControlSwitchingThreshold::getYouBotMailboxMsg(YouBotSlaveMailboxMs
     message.stctOutput.commandNumber = msgType;
     message.stctOutput.moduleAddress = DRIVE;
     message.stctOutput.typeNumber = 12; //PositionControlSwitchingThreshold
-    message.stctOutput.value = (int32) round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
+    message.stctOutput.value = (int32) boost::math::round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
 
   // Bouml preserved body end 0006FBF1
 }
@@ -728,7 +728,7 @@ void SpeedControlSwitchingThreshold::getYouBotMailboxMsg(YouBotSlaveMailboxMsg& 
     message.stctOutput.commandNumber = msgType;
     message.stctOutput.moduleAddress = DRIVE;
     message.stctOutput.typeNumber = 8; //SpeedControlSwitchingThreshold
-    message.stctOutput.value = (int32) round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
+    message.stctOutput.value = (int32) boost::math::round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
 
   // Bouml preserved body end 0006A3F1
 }
@@ -787,7 +787,7 @@ void VelocityThresholdForHallFX::getYouBotMailboxMsg(YouBotSlaveMailboxMsg& mess
     message.stctOutput.commandNumber = msgType;
     message.stctOutput.moduleAddress = DRIVE;
     message.stctOutput.typeNumber = 14; //VelocityThresholdForHallFX
-    message.stctOutput.value = (int32) round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
+    message.stctOutput.value = (int32) boost::math::round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
 
   // Bouml preserved body end 00108271
 }
@@ -2006,7 +2006,7 @@ void MaximumVelocityToSetPosition::getYouBotMailboxMsg(YouBotSlaveMailboxMsg& me
     message.stctOutput.commandNumber = msgType;
     message.stctOutput.moduleAddress = DRIVE;
     message.stctOutput.typeNumber = 7; //MaximumVelocityToSetPosition
-    message.stctOutput.value = (int32) round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
+    message.stctOutput.value = (int32) boost::math::round((value.value() / (storage.gearRatio * 2.0 * M_PI)) * 60.0);
 
   // Bouml preserved body end 00079171
 }
@@ -2118,7 +2118,7 @@ void ClearI2tExceededFlag::getYouBotMailboxMsg(YouBotSlaveMailboxMsg& message, T
 
 void ClearI2tExceededFlag::setYouBotMailboxMsg(const YouBotSlaveMailboxMsg& message, const YouBotJointStorage& storage) {
   // Bouml preserved body begin 000A18F1
-    if (message.stctOutput.commandNumber == message.stctInput.commandNumber && message.stctInput.status == NO_ERROR) {
+    if (message.stctOutput.commandNumber == message.stctInput.commandNumber && message.stctInput.status == MAILBOX_SUCCESS) {
       this->value = message.stctInput.value;
     }
   // Bouml preserved body end 000A18F1
@@ -2167,7 +2167,7 @@ void ClearMotorControllerTimeoutFlag::getYouBotMailboxMsg(YouBotSlaveMailboxMsg&
 
 void ClearMotorControllerTimeoutFlag::setYouBotMailboxMsg(const YouBotSlaveMailboxMsg& message, const YouBotJointStorage& storage) {
   // Bouml preserved body begin 0009FDF1
-    if (message.stctOutput.commandNumber == message.stctInput.commandNumber && message.stctInput.status == NO_ERROR) {
+    if (message.stctOutput.commandNumber == message.stctInput.commandNumber && message.stctInput.status == MAILBOX_SUCCESS) {
       this->value = message.stctInput.value; 
     }
   // Bouml preserved body end 0009FDF1
