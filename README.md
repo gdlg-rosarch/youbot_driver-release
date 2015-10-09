@@ -1,3 +1,24 @@
+## youbot_driver (jade) - 1.1.0-0
+
+The packages in the `youbot_driver` repository were released into the `jade` distro by running `/usr/bin/bloom-release youbot_driver --track jade --rosdistro jade --new-track` on `Fri, 09 Oct 2015 11:47:27 -0000`
+
+The `youbot_driver` package was released.
+
+Version of package(s) in repository `youbot_driver`:
+- upstream repository: https://github.com/youbot/youbot_driver.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `1.1.0-0`
+
+Versions of tools used:
+- bloom version: `0.5.20`
+- catkin_pkg version: `0.2.10`
+- rosdep version: `0.11.4`
+- rosdistro version: `0.4.2`
+- vcstools version: `0.1.37`
+
+
 ## youbot_driver (indigo) - 1.1.0-0
 
 The packages in the `youbot_driver` repository were released into the `indigo` distro by running `/usr/bin/bloom-release youbot_driver --track indigo --rosdistro indigo --new-track` on `Tue, 12 May 2015 12:48:16 -0000`
